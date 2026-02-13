@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story · Valentine's Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ===== ALL STYLES IN ONE PLACE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ff9a9e 100%);
+            min-height: 100vh;
+            color: #4a2c2f;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Floating hearts background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .ambient-heart {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.1;
+            animation: floatHeart 15s infinite ease-in-out;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.15; }
+            80% { opacity: 0.15; transform: translateY(-20vh) rotate(180deg); }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-size: 3rem;
+            color: #d63447;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d63447, transparent);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #774936;
+            font-style: italic;
+        }
+
+        /* Gallery Container */
+        .gallery-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.5);
+            animation: slideUp 1s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Gallery Viewer */
+        .gallery-viewer {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #fff5f0;
+            aspect-ratio: 16 / 10;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .gallery-stage {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Heart Button */
+        .heart-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 20;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+            transition: transform 0.3s ease;
+            background: none;
+            border: none;
+        }
+
+        .heart-overlay:hover {
+            transform: scale(1.2);
+        }
+
+        /* Caption */
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 40px 30px 20px;
+            color: white;
+        }
+
+        .caption-date {
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            color: #ffb3ba;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .caption-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .caption-description {
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d63447;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 30;
+        }
+
+        .nav-control:hover {
+            background: #d63447;
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-control svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-prev { left: 20px; }
+        .nav-next { right: 20px; }
+
+        /* Progress Bar */
+        .gallery-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            z-index: 25;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #d63447;
+            transition: width 0.3s linear;
+        }
+
+        /* Gallery Footer */
+        .gallery-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+
+        .gallery-indicators {
+            display: flex;
+            gap: 12px;
+        }
+
+        .gallery-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(214,52,71,0.3);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .gallery-dot.active {
+            background: #d63447;
+            width: 40px;
+            border-radius: 6px;
+        }
+
+        .gallery-dot:hover {
+            background: #f5576c;
+        }
+
+        .gallery-counter {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #774936;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        /* Message Card */
+        .message-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 10px 30px rgba(214,52,71,0.1);
+        }
+
+        .message-text {
+            font-size: 1.4rem;
+            color: #774936;
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .message-signature {
+            font-family: 'Inter', sans-serif;
+            color: #d63447;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        /* Gamify Trigger */
+        .gamify-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .gamify-trigger {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            border-radius: 60px;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(214,52,71,0.1);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .gamify-trigger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(214,52,71,0.2);
+            background: white;
+        }
+
+        .trigger-text {
+            font-size: 1.3rem;
+            color: #d63447;
+            font-weight: 600;
+        }
+
+        .trigger-emoji {
+            font-size: 2rem;
+            animation: wobble 3s infinite;
+        }
+
+        @keyframes wobble {
+            0%,100% { transform: rotate(0deg); }
+            25% { transform: rotate(8deg); }
+            75% { transform: rotate(-6deg); }
+        }
+
+        /* ===== UPDATED GAMIFY OVERLAY ===== */
+        .gamify-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gamify-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .gamify-container {
+            width: 90%;
+            max-width: 550px;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f, #ff9a9e);
+            border-radius: 50px;
+            padding: 40px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border: 3px solid white;
+        }
+
+        .gamify-overlay.active .gamify-container {
+            transform: scale(1);
+        }
+
+        .gamify-close {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #d63447;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid #d63447;
+            z-index: 10;
+        }
+
+        .gamify-close:hover {
+            background: #d63447;
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        .gamify-close svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .gamify-content {
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .gamify-emoji {
+            font-size: 6rem;
+            line-height: 1;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
+            animation: wobble 3s infinite;
+        }
+
+        .gamify-title {
+            font-size: 3rem;
+            color: #d63447;
+            text-shadow: 3px 3px 0 #fff5f0;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .gamify-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .gamify-btn {
+            padding: 18px 45px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b13e4b, 0 12px 20px rgba(0,0,0,0.2);
+            transition: all 0.1s ease;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 2px;
+            min-width: 180px;
+        }
+
+        .gamify-btn.yes {
+            background: #d63447;
+            color: white;
+            border: 3px solid white;
+        }
+
+        .gamify-btn.yes:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #b13e4b, 0 12px 20px rgba(0,0,0,0.2);
+        }
+
+        /* NO button - completely different color */
+        .gamify-btn.no {
+            background: #2c3e50;  /* Dark blue-gray */
+            color: #ecf0f1;        /* Light gray */
+            border: 3px solid #95a5a6;
+            box-shadow: 0 8px 0 #1a2632, 0 12px 20px rgba(0,0,0,0.2);
+            animation: bounce 0.6s infinite ease-in-out;
+        }
+
+        .gamify-btn.no:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #1a2632, 0 12px 20px rgba(0,0,0,0.2);
+        }
+
+        @keyframes bounce {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .gamify-btn.no.stopped {
+            animation: none;
+            opacity: 0.7;
+            background: #27ae60;  /* Green when stopped */
+            border-color: #2ecc71;
+            box-shadow: 0 8px 0 #1e8449;
+        }
+
+        .gamify-response {
+            font-size: 2rem;
+            color: #d63447;
+            min-height: 5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 5px #fff5f0;
+            font-family: 'Cormorant Garamond', serif;
+            background: rgba(255,255,255,0.3);
+            padding: 15px;
+            border-radius: 40px;
+            backdrop-filter: blur(5px);
+            border: 2px solid white;
+        }
+
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2000;
+            font-size: 30px;
+            filter: drop-shadow(0 0 10px rgba(214,52,71,0.5));
+        }
+
+        /* Override for overlay click - only back button works */
+        .gamify-overlay {
+            pointer-events: all;
+        }
+        
+        .gamify-overlay .gamify-container {
+            pointer-events: all;
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2rem; }
+            .subtitle { font-size: 1rem; }
+            .caption-title { font-size: 1.3rem; }
+            .caption-description { font-size: 0.9rem; }
+            .nav-control { width: 40px; height: 40px; }
+            .gamify-btn { font-size: 1.8rem; padding: 15px 35px; min-width: 150px; }
+            .gamify-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg" id="ambientBg"></div>
+    
+    <main class="main-content">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">Our Love Story</h1>
+                <p class="subtitle">A journey through moments, memories, and forever</p>
+            </div>
+        </header>
+
+        <section class="gallery-container">
+            <div class="gallery-viewer">
+                <div class="gallery-stage" id="galleryStage"></div>
+
+                <button class="nav-control nav-prev" id="prevSlide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                
+                <button class="nav-control nav-next" id="nextSlide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+
+                <div class="gallery-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+
+            <div class="gallery-footer">
+                <div class="gallery-indicators" id="galleryIndicators"></div>
+                <div class="gallery-counter" id="galleryCounter">01 / 02</div>
+            </div>
+        </section>
+
+        <div class="message-card">
+            <p class="message-text">
+                "In every photo, in every moment, in every memory — it's always been you. 
+                Happy Valentine's Day to the love of my life."
+            </p>
+            <div class="message-signature">— <strong>Prof.</strong></div>
+        </div>
+
+        <section class="gamify-section">
+            <button class="gamify-trigger" id="gamifyTrigger">
+                <span class="trigger-text">Will you be my Valentine?</span>
+                <span class="trigger-emoji">🥺❤️🐻</span>
+            </button>
+        </section>
+    </main>
+
+    <div class="gamify-overlay" id="gamifyOverlay">
+        <div class="gamify-container">
+            <button class="gamify-close" id="gamifyClose">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Back to gallery</span>
+            </button>
+            <div id="gamifyRoot"></div>
+        </div>
+    </div>
+
+    <script>
+        // Gallery Data
+        const galleryData = [
+            {
+                id: 1,
+                image: 'hands.jpeg',
+                fallback: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%20viewBox%3D%220%200%20800%20600%22%3E%3Crect%20width%3D%22800%22%20height%3D%22600%22%20fill%3D%22%23f8c3c3%22%2F%3E%3Ctext%20x%3D%22250%22%20y%3D%22300%22%20font-family%3D%22Arial%22%20font-size%3D%2240%22%20fill%3D%22%23b13e4b%22%3E%F0%9F%91%AB%20Photo%201%3C%2Ftext%3E%3C%2Fsvg%3E',
+                date: 'February 14, 2025',
+                title: 'Hand in hand',
+                description: 'Your hand fits perfectly in mine. Every time I hold it, I feel at home.',
+                liked: false
+            },
+            {
+                id: 2,
+                image: 'us.jpeg',
+                fallback: 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22800%22%20height%3D%22600%22%20viewBox%3D%220%200%20800%20600%22%3E%3Crect%20width%3D%22800%22%20height%3D%22600%22%20fill%3D%22%23b8d8e3%22%2F%3E%3Ctext%20x%3D%22270%22%20y%3D%22300%22%20font-family%3D%22Arial%22%20font-size%3D%2240%22%20fill%3D%22%232a4d5c%22%3E%F0%9F%91%AB%20Photo%202%3C%2Ftext%3E%3C%2Fsvg%3E',
+                date: 'Forever, 2025',
+                title: 'You & me',
+                description: 'Together is my favorite place. With you, every moment becomes a memory.',
+                liked: false
+            }
+        ];
+
+        // App State
+        let currentSlide = 0;
+        const totalSlides = galleryData.length;
+        let autoplayInterval;
+
+        // DOM Elements
+        const stage = document.getElementById('galleryStage');
+        const indicators = document.getElementById('galleryIndicators');
+        const counter = document.getElementById('galleryCounter');
+        const progressBar = document.getElementById('progressBar');
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        const gamifyTrigger = document.getElementById('gamifyTrigger');
+        const gamifyOverlay = document.getElementById('gamifyOverlay');
+        const gamifyClose = document.getElementById('gamifyClose');
+        const gamifyRoot = document.getElementById('gamifyRoot');
+
+        // Render Gallery
+        function renderGallery() {
+            // Render slides
+            stage.innerHTML = galleryData.map(item => `
+                <div class="gallery-slide">
+                    <img src="${item.image}" alt="${item.title}" class="gallery-image" onerror="this.src='${item.fallback}'">
+                    <button class="heart-overlay" onclick="toggleHeart(${item.id})">${item.liked ? '❤️' : '🤍'}</button>
+                    <div class="slide-caption">
+                        <div class="caption-date">${item.date}</div>
+                        <div class="caption-title">${item.title}</div>
+                        <div class="caption-description">${item.description}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render indicators
+            indicators.innerHTML = galleryData.map((_, index) => `
+                <button class="gallery-dot ${index === currentSlide ? 'active' : ''}" onclick="goToSlide(${index})"></button>
+            `).join('');
+
+            updateGallery();
+        }
+
+        // Update gallery position
+        function updateGallery() {
+            stage.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update indicators
+            document.querySelectorAll('.gallery-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+            
+            // Update counter
+            counter.textContent = `${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+            
+            // Update progress bar
+            progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+        }
+
+        // Navigation
+        window.nextSlide = function() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateGallery();
+        };
+
+        window.prevSlide = function() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateGallery();
+        };
+
+        window.goToSlide = function(index) {
+            currentSlide = index;
+            updateGallery();
+        };
+
+        // Heart toggle
+        window.toggleHeart = function(id) {
+            const slide = galleryData.find(item => item.id === id);
+            if (slide) {
+                slide.liked = !slide.liked;
+                createHeartBurst();
+                renderGallery();
+            }
+        };
+
+        // Heart burst effect
+        function createHeartBurst() {
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle';
+                    heart.textContent = '❤️';
+                    heart.style.left = '50%';
+                    heart.style.top = '50%';
+                    document.body.appendChild(heart);
+
+                    const angle = (i / 12) * Math.PI * 2;
+                    const x = Math.cos(angle) * 150;
+                    const y = Math.sin(angle) * 150;
+
+                    heart.animate([
+                        { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+                        { transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`, opacity: 0 }
+                    ], {
+                        duration: 1000,
+                        easing: 'ease-out',
+                        fill: 'forwards'
+                    });
+
+                    setTimeout(() => heart.remove(), 1000);
+                }, i * 50);
+            }
+        }
+
+        // Ambient background
+        function createFloatingHeart() {
+            const bg = document.getElementById('ambientBg');
+            const heart = document.createElement('div');
+            heart.className = 'ambient-heart';
+            const hearts = ['❤️', '💕', '💖', '💗', '💝'];
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+            heart.style.animationDuration = (Math.random() * 15 + 15) + 's';
+            bg.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 20000);
+        }
+
+        // Autoplay
+        function startAutoplay() {
+            autoplayInterval = setInterval(nextSlide, 5000);
+        }
+
+        // ===== UPDATED GAMIFY FUNCTION =====
+        function initGamify() {
+            gamifyRoot.innerHTML = `
+                <div class="gamify-content">
+                    <div class="gamify-emoji">🥺❤️🐻</div>
+                    <h2 class="gamify-title">Will you be my Valentine?</h2>
+                    <div class="gamify-buttons">
+                        <button class="gamify-btn yes" id="gamifyYes">YES</button>
+                        <button class="gamify-btn no" id="gamifyNo">NO</button>
+                    </div>
+                    <div id="gamifyResponse" class="gamify-response"></div>
+                </div>
+            `;
+
+            const yesBtn = document.getElementById('gamifyYes');
+            const noBtn = document.getElementById('gamifyNo');
+            const responseEl = document.getElementById('gamifyResponse');
+
+            yesBtn.addEventListener('click', () => {
+                // Stop No button animation and change color
+                noBtn.classList.add('stopped');
+                responseEl.innerHTML = 'Yay! 💖 You made me the happiest!';
+                createHeartBurst();
+                
+                // Change YES button appearance
+                yesBtn.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    yesBtn.style.transform = '';
+                }, 200);
+                
+                // Don't close overlay - user must click back button
+            });
+
+            noBtn.addEventListener('click', () => {
+                if (!noBtn.classList.contains('stopped')) {
+                    const messages = [
+                        'Nice try! 😜 You know you want to say YES!',
+                        'Not an option! Try again! 💕',
+                        'That button is just for fun! 🥰',
+                        'Click YES instead! 💖',
+                        'Nice try, but we both know the answer! 😘'
+                    ];
+                    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                    responseEl.innerHTML = randomMessage;
+                    
+                    // Bounce effect
+                    noBtn.style.transform = 'scale(1.2)';
+                    setTimeout(() => noBtn.style.transform = '', 200);
+                    
+                    createHeartBurst();
+                    
+                    // Make NO button move randomly sometimes
+                    if (Math.random() > 0.5) {
+                        noBtn.style.transform = `translateX(${Math.random() * 20 - 10}px)`;
+                        setTimeout(() => noBtn.style.transform = '', 300);
+                    }
+                }
+            });
+        }
+
+        // Event Listeners
+        prevBtn.addEventListener('click', () => { prevSlide(); clearInterval(autoplayInterval); startAutoplay(); });
+        nextBtn.addEventListener('click', () => { nextSlide(); clearInterval(autoplayInterval); startAutoplay(); });
+
+        document.querySelector('.gallery-viewer').addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+        document.querySelector('.gallery-viewer').addEventListener('mouseleave', startAutoplay);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!gamifyOverlay.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') { prevSlide(); clearInterval(autoplayInterval); startAutoplay(); }
+                if (e.key === 'ArrowRight') { nextSlide(); clearInterval(autoplayInterval); startAutoplay(); }
+            } else {
+                // When overlay is active, only Escape works if you want to allow it
+                // Comment out the next line if you want to force using the back button only
+                // if (e.key === 'Escape') { gamifyOverlay.classList.remove('active'); }
+            }
+        });
+
+        // Touch support
+        let touchStartX = 0;
+        document.querySelector('.gallery-viewer').addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+        });
+
+        document.querySelector('.gallery-viewer').addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextSlide();
+                else prevSlide();
+                clearInterval(autoplayInterval);
+                startAutoplay();
+            }
+        });
+
+        // Gamify triggers
+        gamifyTrigger.addEventListener('click', () => {
+            gamifyOverlay.classList.add('active');
+            initGamify();
+        });
+
+        // Only back button closes the overlay
+        gamifyClose.addEventListener('click', () => {
+            gamifyOverlay.classList.remove('active');
+        });
+
+        // Remove click on overlay to close - now only back button works
+        // gamifyOverlay.addEventListener('click', (e) => {
+        //     if (e.target === gamifyOverlay) {
+        //         gamifyOverlay.classList.remove('active');
+        //     }
+        // });
+
+        // Initialize everything
+        renderGallery();
+        startAutoplay();
+
+        // Create floating hearts
+        setInterval(createFloatingHeart, 800);
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createFloatingHeart, i * 200);
+        }
+    </script>
+</body>
+</html>
